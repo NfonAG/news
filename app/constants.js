@@ -3,3 +3,4 @@
  */
 
 export const API_URL = '/api';
+export const LIKED_KEY = 'liked';

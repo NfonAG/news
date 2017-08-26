@@ -38,26 +38,35 @@ function getSort(sort) {
 router.get('/', (req, res) => {
   let sort = getSort(req.query.sort);
 
-  News.find({})
+  News.find()
     .sort(sort)
+    .select('_id title nickname likes link comments')
+    .lean()
     .execAsync()
     .then(news => {
+      news.forEach(item => {
+        item.comments = item.comments.length;
+      });
+
       res.status(200).json(news);
     })
+    .catch(handleError(res, 400));
 });
 
 router.get('/:id', (req, res) => {
-  News.findByIdAsync(req.params.id)
+  News.findById(req.params.id)
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'comments',
+        model: 'Comment'
+      }
+    })
+    .execAsync()
     .then(handleEntityNotFound(res))
     .then(news => {
       if (news) {
-        News.populate(news, { path: 'comments' }, (err, news) => {
-          if (err) {
-            handleError(res, 400)(err);
-            return null;
-          }
-          res.status(200).json(news);
-        });
+        res.status(200).json(news);
       }
     })
     .catch(handleError(res, 400));
@@ -125,6 +134,36 @@ router.post('/:id/comments', (req, res) => {
           news.comments.push(comment._id);
 
           news.saveAsync()
+            .then(() => {
+              res.status(200).json(comment);
+            })
+            .catch(handleError(res, 400));
+        })
+        .catch(handleError(res, 400));
+    })
+    .catch(handleError(res, 400));
+});
+
+router.post('/:id/comments/:commentId', (req, res) => {
+  Comment.findOneAsync({ _id: req.params.commentId, news: req.params.id })
+    .then(handleEntityNotFound(res))
+    .then(parentComment => {
+      if (!parentComment) {
+        return null;
+      }
+
+      Comment.createAsync({
+        nickname: req.body.nickname,
+        content: req.body.content,
+        news: parentComment.news,
+        parentComment: parentComment._id,
+        comments: []
+      })
+        .then(comment => {
+
+          parentComment.comments.push(comment._id);
+
+          parentComment.saveAsync()
             .then(() => {
               res.status(200).json(comment);
             })

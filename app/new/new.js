@@ -2,8 +2,9 @@
  * Created by Vadym Yatsyuk on 24.08.17
  */
 import React from 'react';
+
 import { NewsService } from '../news.service';
-import { News } from '../news/news';
+import { NewsList } from '../news-list/news-list';
 
 export class New extends React.Component {
   constructor() {
@@ -24,16 +25,9 @@ export class New extends React.Component {
   }
 
   render() {
-
-    const news = this.state.news.map(newsItem => {
-      news.push(<News key={ newsItem._id } item={ newsItem } />);
-    });
-
     return (
       <div>
-        <ul>
-          { news }
-        </ul>
+        <NewsList items={ this.state.news } />
       </div>
     )
   }

@@ -15,7 +15,7 @@ module.exports = {
     path.join(config.rootSource, 'main.js')
   ],
   output: {
-    path: path.join(config.staticIndexFile, '/'),
+    path: path.join(config.staticDir, '/'),
     filename: '[name]-[hash].min.js',
     publicPath: '/'
   },
@@ -47,7 +47,8 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel-loader',
       query: {
-        "presets": ["es2015", "stage-0", "react"]
+        presets: ["es2015", "stage-0", "react"],
+        plugins: [ [ "import", { libraryName: "antd", style: "css" } ] ]
       }
     }, {
       test: /\.scss$/,

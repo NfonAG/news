@@ -4,10 +4,19 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { NewsService } from '../news.service';
+import { Link } from '../link/link';
+import { LIKED_KEY } from '../constants';
 
 export class News extends React.Component {
+  static propTypes = {
+    item: PropTypes.object.isRequired,
+    index: PropTypes.number,
+    onLiked: PropTypes.func
+  };
+
   constructor() {
     super();
 
@@ -18,20 +27,30 @@ export class News extends React.Component {
     this.like = this.like.bind(this);
   }
 
-  updateLikeInProgress(inProgress) {
+  set inProgress(inProgress) {
     this.setState({
       inProgress
     });
   }
 
   like() {
-    this.updateLikeInProgress(true);
+    this.inProgress = true;
+    let liked = JSON.parse(localStorage.getItem(LIKED_KEY)) || [];
+
+    if (liked.indexOf(this.props.item._id) !== -1) {
+      this.inProgress = false;
+      return;
+    }
 
     this.newsService
       .like(this.props.item._id)
       .then(() => {
+        liked.push(this.props.item._id);
+        localStorage.setItem(LIKED_KEY, JSON.stringify(liked));
 
-        this.updateLikeInProgress(false);
+        this.props.onLiked();
+
+        this.inProgress = false;
       });
   }
 
@@ -41,12 +60,12 @@ export class News extends React.Component {
     return (
       <li>
         <div>
-          { this.props.item.title }
+          <Link title={ this.props.item.title } link={ this.props.item.link } />
         </div>
         <div>
-          { btnLike } {this.props.item.likes } Likes, By { this.props.item.nickname } <NavLink to={ `/news/${ this.props.item._id }` }>Comment</NavLink>
+          { btnLike } {this.props.item.likes } Likes, By { this.props.item.nickname } <NavLink to={ `/news/${ this.props.item._id }` }>Comment ({ this.props.item.comments })</NavLink>
         </div>
       </li>
-    )
+    );
   }
 }

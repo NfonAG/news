@@ -4,7 +4,10 @@
 
 import React from 'react';
 import { NewsService } from '../news.service';
-import { Comment } from '../comment-form/comment-form';
+import { CommentForm } from '../comment-form/comment-form';
+import { Comment } from '../comment/comment';
+import { Link } from '../link/link';
+import { LIKED_KEY } from '../constants';
 
 export class Details extends React.Component {
   constructor() {
@@ -32,16 +35,26 @@ export class Details extends React.Component {
           item: news,
           isLoading: false
         });
+      })
+      .catch(e => {
+
       });
   }
 
   like() {
     this.inProgress = true;
+    let liked = JSON.parse(localStorage.getItem(LIKED_KEY)) || [];
+
+    if (liked.indexOf(this.state.item._id) !== -1) {
+      this.inProgress = false;
+      return;
+    }
 
     this.newsService
       .like(this.state.item._id)
       .then(() => {
-
+        liked.push(this.state.item._id);
+        localStorage.setItem(LIKED_KEY, JSON.stringify(liked));
         this.inProgress = false;
       });
   }
@@ -73,22 +86,22 @@ export class Details extends React.Component {
       let btnLike = <button onClick={ this.like } type="button" disabled={ this.state.inProgress }>Like</button>;
 
       let comments = this.state.item.comments.map(comment => {
-        return <li>{ comment.content }</li>
+        return <Comment key={ comment._id } comment={ comment } />
       });
 
       details = (
         <div>
           <div>
-            { this.state.item.title }
+            <Link link={ this.state.item.link } title={ this.state.item.title }/>
           </div>
           <div>
             { btnLike } { this.state.item.likes } Likes, By { this.state.item.nickname }
           </div>
-          <ul>
-            { comments }
-          </ul>
           <div>
-            <Comment newsId={ this.state.item._id } onSent={ this.onSentNewComment } />
+            <CommentForm newsId={ this.state.item._id } onSent={ this.onSentNewComment } />
+          </div>
+          <div>
+            { comments }
           </div>
         </div>
       )

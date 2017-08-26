@@ -11,6 +11,10 @@ export class NewsService {
   request(url) {
     return fetch(url)
       .then(response => {
+
+        if (response.status >= 400) {
+          throw new Error();
+        }
         return response.json();
       });
   }
@@ -62,8 +66,14 @@ export class NewsService {
       });
   }
 
-  createComment(newsId, comment) {
-    return fetch(`${ this.NEWS_URL }/${ newsId }/comments`, {
+  createComment(newsId, commentId, comment) {
+    let url = `${ this.NEWS_URL }/${ newsId }/comments`;
+
+    if (commentId) {
+      url += `/${ commentId }`;
+    }
+
+    return fetch(url, {
       method: 'POST',
       body: JSON.stringify(comment),
       headers: {

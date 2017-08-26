@@ -3,11 +3,13 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { NewsService } from '../news.service';
+import { Form, Input, Button } from 'antd';
 
 export class Submit extends React.Component {
   static propTypes = {
-    history: React.PropTypes.object.isRequired
+    history: PropTypes.object.isRequired
   };
 
   constructor() {
@@ -63,30 +65,32 @@ export class Submit extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={ this.onSubmit }>
-          <div>
-            <input type="text"
+        <Form onSubmit={ this.onSubmit }>
+          <Form.Item>
+            <Input type="text"
                    placeholder="Title"
                    value={ this.state.news.title }
                    onChange={ this.onValueChange('title') }
             />
-          </div>
-          <div>
-            <input type="text"
+          </Form.Item>
+          <Form.Item>
+            <Input type="text"
                    placeholder="Link"
                    value={ this.state.news.link }
                    onChange={ this.onValueChange('link') }
             />
-          </div>
-          <div>
-            <input type="text"
+          </Form.Item>
+          <Form.Item>
+            <Input type="text"
                    placeholder="Nickname"
                    value={ this.state.news.nickname }
                    onChange={ this.onValueChange('nickname') }
             />
-          </div>
-          <button>Create</button>
-        </form>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">Submit</Button>
+          </Form.Item>
+        </Form>
       </div>
     );
   }

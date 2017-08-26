@@ -20,6 +20,10 @@ let CommentSchema = new mongoose.Schema({
   news: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'News'
+  },
+  parentComment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'
   }
 }, {
   timestamps: true

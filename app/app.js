@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { Layout } from 'antd';
 
 import './app.scss';
 import { Header } from './header/header';
@@ -12,12 +13,12 @@ export class App extends React.Component {
 
 
     return (
-      <div className="app-component">
+      <Layout className="layout app-component">
         <Header/>
-        <section>
+        <Layout.Content style={{ padding: '10px 50px' }}>
           { this.props.children }
-        </section>
-      </div>
+        </Layout.Content>
+      </Layout>
     );
   }
 }

@@ -7,7 +7,7 @@ const isDeveloping = process.env.NODE_ENV !== 'production';
 const staticDir = path.join(__dirname, 'static');
 
 module.exports = {
-  rootSource: path.join(__dirname, '../app'),
+  rootSource: path.join(__dirname, 'app'),
   staticDir,
   staticIndexFile: path.join(staticDir, 'index.html'),
   port: process.env.PORT || 8000,

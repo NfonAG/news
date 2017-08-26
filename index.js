@@ -18,7 +18,7 @@ const app = express();
 
 mongoose.connect(config.mongodb.uri, config.mongodb.options);
 mongoose.connection.on('error', (err) => {
-  console.log(chalk.pink(`MongoDB connection error: ${ err }`));
+  console.log(chalk.red(`MongoDB connection error: ${ err }`));
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -54,7 +54,7 @@ function prod() {
     res.sendFile(config.staticIndexFile);
   });
 }
-console.log(config.staticIndexFile);
+
 if (config.isDeveloping) {
   develop();
 } else {

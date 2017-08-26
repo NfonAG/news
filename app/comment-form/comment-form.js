@@ -3,9 +3,18 @@
  */
 
 import React from 'react';
-import { NewsService } from '../news.service';
+import PropTypes from 'prop-types';
+import { Form, Input, Button, Icon } from 'antd';
 
-export class Comment extends React.Component {
+import { NewsService } from '../news.service';
+const FormItem = Form.Item;
+
+export class CommentForm extends React.Component {
+  static propTypes = {
+    newsId: PropTypes.string,
+    commentId: PropTypes.string,
+    onSent: PropTypes.func
+  };
   constructor() {
     super();
 
@@ -33,7 +42,8 @@ export class Comment extends React.Component {
 
     this.isSending = true;
 
-    this.newsService.createComment(this.props.newsId, this.state.comment)
+    this.newsService
+      .createComment(this.props.newsId, this.props.commentId, this.state.comment)
       .then((comment) => {
 
         this.isSending = false;
@@ -53,27 +63,29 @@ export class Comment extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={ this.onSubmit }>
+        <Form onSubmit={ this.onSubmit }>
           <h6>
             Comment
           </h6>
-          <div>
-            <input type="text"
+          <FormItem>
+            <Input type="text"
                    placeholder="Nickname"
                    value={ this.state.comment.nickname }
                    onChange={ this.onValueChange('nickname') }
+                   prefix={<Icon type="user" style={{ fontSize: 13 }} />}
             />
-          </div>
-          <div>
-            <textarea cols="30"
-                      rows="10"
-                      value={ this.state.comment.content }
-                      placeholder="Comment..."
-                      onChange={ this.onValueChange('content') }
-            ></textarea>
-          </div>
-          <button type="submit">Comment</button>
-        </form>
+          </FormItem>
+          <FormItem>
+            <Input type="textarea"
+                   value={ this.state.comment.content }
+                   placeholder="Comment..."
+                   onChange={ this.onValueChange('content') }
+            />
+          </FormItem>
+          <FormItem>
+            <Button type="primary" htmlType="submit">Comment</Button>
+          </FormItem>
+        </Form>
       </div>
     )
   }

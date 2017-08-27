@@ -28,6 +28,7 @@
     "chalk": "^2.1.0",
     "cross-env": "^5.0.5",
     "express": "^4.15.4",
+    "moment": "^2.18.1",
     "mongoose": "^4.11.8",
     "nodemon": "^1.11.0",
     "prop-types": "^15.5.10",

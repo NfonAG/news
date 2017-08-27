@@ -5,6 +5,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './link.scss';
+
 export class Link extends React.Component {
   static propTypes = {
     link: PropTypes.string,
@@ -14,8 +16,8 @@ export class Link extends React.Component {
   render() {
     const url = new URL(this.props.link);
     return (
-      <div>
-        <a href={ this.props.link }>{ this.props.title }</a><a href={ url.origin }>({ url.hostname })</a>
+      <div className="link-component">
+        <a href={ this.props.link } className="link">{ this.props.title }</a><a href={ url.origin } className="origin">({ url.hostname })</a>
       </div>
     )
   }

@@ -23,37 +23,31 @@ export class Header extends React.Component {
     }
   }
 
-  // componentWillReceiveProps() {
-  //   this.setState({ selectedKeys: [this.props.router.location.pathname] });
-  // }
-
-  // componentDidMount() {
-  //   this.setState({ selectedKeys: [this.props.router.location.pathname] });
-  // }
-
-  // linkTo(item) {
-  //   this.props.router.push(item.key);
-  // }
-
   render() {
     return (
       <AntdHeader className="layout-header">
-        <Menu theme="light"
-              mode="horizontal"
-              style={{ lineHeight: '64px' }}
-        >
-            <Menu.Item key="/">
-              <NavLink to="/" exact activeClassName="active">
-                Top
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="/new">
-              <NavLink to="/new" exact activeClassName="active">New</NavLink>
-            </Menu.Item>
-            <Menu.Item key="/submit">
-              <NavLink to="/submit" exact activeClassName="active">Submit</NavLink>
-            </Menu.Item>
-        </Menu>
+        <div>
+          <span className="logo">
+            <NavLink to="/">NEWS</NavLink>
+          </span>
+          <Menu theme="light"
+                mode="horizontal"
+                style={{ lineHeight: '64px' }}
+                selectedKeys={[window.location.pathname]}
+          >
+              <Menu.Item key="/">
+                <NavLink to="/" exact activeClassName="active">
+                  Top
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item key="/new">
+                <NavLink to="/new" exact activeClassName="active">New</NavLink>
+              </Menu.Item>
+              <Menu.Item key="/submit">
+                <NavLink to="/submit" exact activeClassName="active">Submit</NavLink>
+              </Menu.Item>
+          </Menu>
+        </div>
       </AntdHeader>
     );
   }

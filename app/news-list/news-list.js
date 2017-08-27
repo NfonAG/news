@@ -14,7 +14,7 @@ export class NewsList extends React.Component {
 
   render() {
     const news = this.props.items.map((newsItem, i) => {
-      return <News key={ newsItem._id } item={ newsItem } index={ i } onLiked={ this.props.onLiked(newsItem) } />;
+      return <News key={ newsItem._id } item={ newsItem } index={ i + 1 } onLiked={ this.props.onLiked(newsItem) } />;
     });
 
     return (

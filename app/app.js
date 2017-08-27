@@ -14,8 +14,8 @@ export class App extends React.Component {
 
     return (
       <Layout className="layout app-component">
-        <Header/>
-        <Layout.Content style={{ padding: '10px 50px' }}>
+        <Header />
+        <Layout.Content>
           { this.props.children }
         </Layout.Content>
       </Layout>

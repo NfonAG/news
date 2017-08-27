@@ -1,7 +1,14 @@
-html,
-body,
-#app,
-#app > .ant-layout {
-  height: 100%;
-  width: 100%;
+@import "variables";
+
+body {
+  background-color: $main-background-color;
+}
+
+.ant-layout-content {
+  padding: 10px;
+  width: $max-width;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 10px;
+  background-color: $container-background-color;
 }

@@ -1,0 +1,25 @@
+@import "../variables";
+
+.comment-component {
+  margin-bottom: 10px;
+
+  .details {
+    color: $subtitle-color;
+  }
+  .content {
+
+  }
+
+  .reply-btn {
+    border: none;
+    background-color: transparent;
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .replies {
+    margin-top: 10px;
+    padding-left: 25px;
+  }
+}

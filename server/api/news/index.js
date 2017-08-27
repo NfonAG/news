@@ -36,11 +36,15 @@ function getSort(sort) {
 }
 
 router.get('/', (req, res) => {
+  let pageSize = 20;
   let sort = getSort(req.query.sort);
+  let page = parseInt(req.query.page, 10) || 1;
 
   News.find()
     .sort(sort)
-    .select('_id title nickname likes link comments')
+    .skip((page - 1) * pageSize)
+    .limit(pageSize)
+    .select('_id title nickname likes link comments createdAt')
     .lean()
     .execAsync()
     .then(news => {
@@ -55,19 +59,42 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   News.findById(req.params.id)
-    .populate({
-      path: 'comments',
-      populate: {
-        path: 'comments',
-        model: 'Comment'
-      }
-    })
+    .select('_id title nickname likes link comments createdAt')
+    .lean()
     .execAsync()
     .then(handleEntityNotFound(res))
     .then(news => {
       if (news) {
+        news.comments = news.comments.length;
         res.status(200).json(news);
       }
+    })
+    .catch(handleError(res, 400));
+});
+
+router.get('/:id/comments', (req, res) => {
+  let pageSize = 20;
+  let page = parseInt(req.query.page, 10) || 1;
+
+  News.findByIdAsync(req.params.id)
+    .then(handleEntityNotFound(res))
+    .then(news => {
+      if (!news) {
+        return null;
+      }
+
+      Comment.find({
+        news: news._id,
+        parentComment: null
+      })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .populate('comments')
+        .execAsync()
+        .then(comments => {
+          res.status(200).json(comments);
+        })
+        .catch(handleError(res, 400));
     })
     .catch(handleError(res, 400));
 });
@@ -96,24 +123,6 @@ router.post('/', (req, res) => {
 });
 
 
-router.get('/:id/comments', (req, res) => {
-  News.findByIdAsync(req.params.id)
-    .then(handleEntityNotFound(res))
-    .then(news => {
-      if (!news) {
-        return null;
-      }
-
-      Comment.findAsync({
-        news: news._id
-      })
-        .then(comments => {
-          res.status(200).json(comments);
-        })
-        .catch(handleError(res, 400));
-    })
-    .catch(handleError(res, 400));
-});
 
 router.post('/:id/comments', (req, res) => {
   News.findByIdAsync(req.params.id)

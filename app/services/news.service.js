@@ -1,14 +1,11 @@
 /**
  * Created by Vadym Yatsyuk on 24.08.17
  */
-import { API_URL } from './constants';
+import { API_URL } from '../constants';
 
+const NEWS_URL = `${ API_URL }/news`;
 export class NewsService {
-  constructor() {
-    this.NEWS_URL = `${ API_URL }/news`;
-  }
-
-  request(url) {
+  static request(url) {
     return fetch(url)
       .then(response => {
 
@@ -19,29 +16,29 @@ export class NewsService {
       });
   }
 
-  get(sort) {
-    let url = this.NEWS_URL;
+  static get(sort, page = 1) {
+    let url = NEWS_URL;
     if (sort) {
-      url += `?sort=${ sort }`
+      url += `?sort=${ sort }&page=${ page }`;
     }
 
-    return this.request(url);
+    return NewsService.request(url);
   }
 
-  getTop() {
-    return this.get('top');
+  static getTop(page) {
+    return NewsService.get('top', page);
   }
 
-  getNew() {
-    return this.get('new');
+  static getNew(page) {
+    return NewsService.get('new', page);
   }
 
-  getById(id) {
-    return this.request(`${ this.NEWS_URL }/${ id }`);
+  static getById(id) {
+    return NewsService.request(`${ NEWS_URL }/${ id }`);
   }
 
-  create(data) {
-    return fetch(this.NEWS_URL, {
+  static create(data) {
+    return fetch(NEWS_URL, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -54,8 +51,8 @@ export class NewsService {
       });
   }
 
-  like(id) {
-    return fetch(`${ this.NEWS_URL }/${ id }/likes`, {
+  static like(id) {
+    return fetch(`${ NEWS_URL }/${ id }/likes`, {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
@@ -66,8 +63,8 @@ export class NewsService {
       });
   }
 
-  createComment(newsId, commentId, comment) {
-    let url = `${ this.NEWS_URL }/${ newsId }/comments`;
+  static createComment(newsId, commentId, comment) {
+    let url = `${ NEWS_URL }/${ newsId }/comments`;
 
     if (commentId) {
       url += `/${ commentId }`;
@@ -84,5 +81,9 @@ export class NewsService {
       .then(response => {
         return response.json();
       });
+  }
+
+  static getComments(newsId, page = 1) {
+    return NewsService.request(`${ NEWS_URL }/${ newsId }/comments?page=${ page }`);
   }
 }

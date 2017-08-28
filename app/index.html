@@ -3,6 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>News</title>
+
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async='async'></script>
+    <script>
+      var OneSignal = window.OneSignal || [];
+      OneSignal.push(["init", {
+        appId: '43a0de9d-5adb-438e-b780-46756a50ec3f',
+        autoRegister: true,
+        httpPermissionRequest: {
+          enable: true
+        },
+        notifyButton: {
+          enable: false
+        },
+        promptOptions: {
+          actionMessage: "We'd like to show you notifications for the latest news and updates.",
+          acceptButtonText: 'ALLOW',
+          cancelButtonText: 'NO THANKS'
+        }
+      }]);
+    </script>
 </head>
 <body>
     <div id="app"></div>

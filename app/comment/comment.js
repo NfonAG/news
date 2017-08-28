@@ -19,7 +19,7 @@ export class Comment extends React.Component {
 
     this.state = {
       isReplyShown: false,
-      newComment: null
+      newComments: []
     };
 
     this.reply = this.reply.bind(this);
@@ -38,7 +38,7 @@ export class Comment extends React.Component {
 
   onSent(comment) {
     this.setState({
-      newComment: Object.assign({}, comment)
+      newComments: [...this.state.newComments, comment]
     });
     this.isReplyShown = false;
   }
@@ -55,33 +55,7 @@ export class Comment extends React.Component {
     return date;
   }
 
-  render() {
-    let commentForm = '';
-    let newComment = '';
-    let replyButton = '';
-
-
-    if (!this.props.comment.parentComment) {
-      replyButton = (
-        <div>
-          <button type="button"
-                  onClick={ this.reply.bind(this) }
-                  className="reply-btn"
-          >
-            Reply
-          </button>
-        </div>
-      );
-    }
-
-    if (this.state.isReplyShown) {
-      commentForm = <CommentForm newsId={ this.props.comment.news } commentId={ this.props.comment._id } onSent={ this.onSent } />
-    }
-
-    if (this.state.newComment) {
-      newComment = <div><Comment comment={ this.state.newComment }/></div>;
-    }
-
+  getComments() {
     let comments = null;
 
     if (this.props.comment && this.props.comment.comments && this.props.comment.comments.length) {
@@ -91,6 +65,50 @@ export class Comment extends React.Component {
       comments = <div className="replies">{ comments }</div>
     }
 
+    return comments;
+  }
+
+  getNewComments() {
+    let newComments = null;
+
+    if (this.state.newComments.length) {
+      newComments = this.state.newComments.map(newComment => {
+        return <Comment key={ newComment._id } comment={ newComment }/>;
+      });
+
+      newComments = <div className="replies">{ newComments }</div>;
+    }
+
+    return newComments;
+  }
+
+  getCommentForm() {
+    if (!this.state.isReplyShown) {
+      return null;
+    }
+
+    return <CommentForm newsId={ this.props.comment.news } commentId={ this.props.comment._id } onSent={ this.onSent } />
+  }
+
+  getReplyButton() {
+    if (this.props.comment.parentComment) {
+      return null;
+    }
+
+    return (
+      <div>
+        <button type="button"
+                onClick={ this.reply.bind(this) }
+                className="reply-btn"
+        >
+          Reply
+        </button>
+      </div>
+    );
+  }
+
+  render() {
+
     return (
       <div className="comment-component">
         <div className="details">
@@ -99,10 +117,10 @@ export class Comment extends React.Component {
         <div className="content">
           { this.props.comment.content }
         </div>
-        { replyButton }
-        { commentForm }
-        { newComment }
-        { comments }
+        { this.getReplyButton() }
+        { this.getCommentForm() }
+        { this.getComments() }
+        { this.getNewComments() }
       </div>
     );
   }

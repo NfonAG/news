@@ -3,6 +3,7 @@
  */
 
 const Router = require('express').Router;
+const request = require('request');
 
 const News = require('./news.model');
 const Comment = require('./comment.model');
@@ -118,6 +119,7 @@ router.post('/', (req, res) => {
   })
     .then(news => {
       res.status(200).json(news);
+      sendNotification(news);
     })
     .catch(handleError(res, 400));
 });
@@ -184,3 +186,26 @@ router.post('/:id/comments/:commentId', (req, res) => {
 });
 
 module.exports = router;
+
+function sendNotification(news) {
+  request({
+    url: 'https://onesignal.com/api/v1/notifications',
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      "Authorization": "Basic ZmRmMTY4MTQtYWYyMy00NmQwLWE3YTUtMDU1ZjQ2Y2FmNzZk"
+    },
+    body: JSON.stringify({
+      app_id: '43a0de9d-5adb-438e-b780-46756a50ec3f',
+      contents: { en: news.title },
+      included_segments: ["All"]
+    })
+  }, (err, response, body) => {
+    console.log(err);
+    console.log(response);
+    console.log(body);
+    if (!err) {
+
+    }
+  });
+}

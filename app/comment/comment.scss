@@ -18,8 +18,12 @@
     cursor: pointer;
   }
 
+  .replies,
+  .comment-from-component {
+    padding-left: 25px;
+  }
+
   .replies {
     margin-top: 10px;
-    padding-left: 25px;
   }
 }

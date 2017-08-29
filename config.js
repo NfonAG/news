@@ -17,5 +17,9 @@ module.exports = {
     options: {
       useMongoClient: true
     }
+  },
+  oneSignal: {
+    app_id: process.env.ONESIGNAL_APP_ID || '43a0de9d-5adb-438e-b780-46756a50ec3f',
+    token: process.env.ONESIGNAL_TOKEN || 'ZmRmMTY4MTQtYWYyMy00NmQwLWE3YTUtMDU1ZjQ2Y2FmNzZk'
   }
 };

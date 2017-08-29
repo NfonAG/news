@@ -5,6 +5,7 @@
 const Router = require('express').Router;
 const request = require('request');
 
+const config = require('../../../config');
 const News = require('./news.model');
 const Comment = require('./comment.model');
 const SORT_TYPES = require('./sort-types');
@@ -193,17 +194,14 @@ function sendNotification(news) {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      "Authorization": "Basic ZmRmMTY4MTQtYWYyMy00NmQwLWE3YTUtMDU1ZjQ2Y2FmNzZk"
+      "Authorization": `Basic ${ config.oneSignal.token }`
     },
     body: JSON.stringify({
-      app_id: '43a0de9d-5adb-438e-b780-46756a50ec3f',
-      contents: { en: news.title },
+      app_id: config.oneSignal.app_id,
+      contents: { en: `New ite: "${ news.title }"` },
       included_segments: ["All"]
     })
   }, (err, response, body) => {
-    console.log(err);
-    console.log(response);
-    console.log(body);
     if (!err) {
 
     }

@@ -2,6 +2,11 @@
 
 > share, upvote and comment links 
 
+# Build
+
+```
+npm run build
+```
 
 # Contribute
 

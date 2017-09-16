@@ -1,7 +1,7 @@
 {
   "name": "news",
   "version": "0.1.0",
-  "description": "News",
+  "description": "share, upvote and comment links",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js --config nodemon.config.json",
